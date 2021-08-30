@@ -21,6 +21,7 @@ class TodoResource extends JsonResource
             'attachment' => $this->attachment,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'items' => TodoItemResource::collection($this->items),
         ];
     }
 }

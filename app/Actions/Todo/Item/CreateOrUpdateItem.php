@@ -33,18 +33,24 @@ class CreateOrUpdateItem
         $todo = Todo::query()->whereUserId($user->id)->findOrFail($todoId);
 
         if ($itemId) {
-            return TodoItemResource::make(
-                tap(
-                    TodoItem::query()->findOrFail($itemId),
-                    static fn (TodoItem $todoItem) => $todoItem->update($request->validated())
+            return [
+                'data' => TodoItemResource::make(
+                    tap(
+                        TodoItem::query()->findOrFail($itemId),
+                        static fn (TodoItem $todoItem) => $todoItem->update($request->validated())
+                    )
                 )
-            );
+            ];
+                
         }
 
         $todoData = array_merge($request->validated(), [
             'todo_id' => $todo->id
         ]);
 
-        return TodoItemResource::make(TodoItem::query()->create($todoData));
+        return [
+            'data' => TodoItemResource::make(TodoItem::query()->create($todoData))
+        ];
+        
     }
 }
